@@ -158,6 +158,12 @@ After generating a report, the app shows:
 
 No license file is currently included in this repository.
 
+
 ## Author
 
 Developed by Tharindu Nimsara.
+
+## Demo video
+
+https://github.com/user-attachments/assets/2018c7e4-5dc6-4310-92b6-c4f0f77d5a64
+
