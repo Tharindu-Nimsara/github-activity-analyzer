@@ -16,7 +16,7 @@ def plot_commit_heatmap(commits_df):
     heatmap_data.index = days
 
     # Create the plot
-    fig, ax = plt.subplots(figsize=(12, 3))
+    fig, ax = plt.subplots(figsize=(7.2, 1.9))
     sns.heatmap(heatmap_data, cmap="Greens", linewidths=.5, ax=ax, cbar_kws={'label': 'Commits'})
     ax.set_title("Commit Activity Heatmap")
     ax.set_xlabel("Week of Year")
@@ -32,7 +32,7 @@ def plot_code_frequency(code_freq_df):
     # Group by week and sum additions/deletions
     weekly_data = code_freq_df.groupby('week_timestamp')[['additions', 'deletions']].sum().reset_index()
 
-    fig, ax = plt.subplots(figsize=(10, 4))
+    fig, ax = plt.subplots(figsize=(8.2, 3.0))
     
     # Plot additions (green) and deletions (red)
     ax.plot(weekly_data['week_timestamp'], weekly_data['additions'], label='Additions', color='green')
@@ -55,8 +55,16 @@ def plot_repo_distribution(commits_df):
     # Count commits per repo, get top 5
     repo_counts = commits_df['repo'].value_counts().head(5)
     
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.pie(repo_counts.values, labels=repo_counts.index, autopct='%1.1f%%', startangle=90, cmap="Set3")
+    fig, ax = plt.subplots(figsize=(4.8, 4.8))
+    colors = plt.get_cmap("Set3")(range(len(repo_counts)))
+    ax.pie(
+        repo_counts.values,
+        labels=repo_counts.index,
+        autopct='%1.1f%%',
+        startangle=90,
+        colors=colors
+    )
     ax.set_title("Top 5 Active Repositories")
+    ax.axis('equal')
     
     return fig

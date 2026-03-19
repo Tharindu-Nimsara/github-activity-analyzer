@@ -8,8 +8,13 @@ token = os.getenv("GITHUB_TOKEN")
 auth = Auth.Token(token)
 g = Github(auth=auth)
 
-def fetch_github_data(target_username):
-    print(f"Fetching data for user: {target_username}...\n")
+def fetch_github_data(target_username, progress_callback=None):
+    def log(message):
+        print(message)
+        if progress_callback:
+            progress_callback(message)
+
+    log(f"Fetching data for user: {target_username}...")
     
     # Data storage lists
     commit_data = []
@@ -20,7 +25,7 @@ def fetch_github_data(target_username):
         repos = user.get_repos()
 
         for repo in repos:
-            print(f"Analyzing repo: {repo.name}")
+            log(f"Analyzing repo: {repo.name}")
             
             # 2. Fetch Commits
             try:
@@ -31,7 +36,7 @@ def fetch_github_data(target_username):
                         "date": commit.commit.author.date
                     })
             except Exception as e:
-                print(f"  - Skipping commits (Repo might be empty): {e}")
+                log(f"  - Skipping commits (Repo might be empty): {e}")
 
             # 3. Fetch Code Frequency
             try:
@@ -46,16 +51,16 @@ def fetch_github_data(target_username):
                             "deletions": week.deletions
                         })
             except Exception as e:
-                print(f"  - Skipping code frequency: {e}")
+                log(f"  - Skipping code frequency: {e}")
 
-        print("\nData extraction complete!")
-        print(f"Total Commits Found: {len(commit_data)}")
-        print(f"Total Weeks of Code Freq Found: {len(code_freq_data)}")
+        log("Data extraction complete!")
+        log(f"Total Commits Found: {len(commit_data)}")
+        log(f"Total Weeks of Code Freq Found: {len(code_freq_data)}")
         
         return commit_data, code_freq_data
 
     except Exception as e:
-        print(f"Error fetching user data: {e}")
+        log(f"Error fetching user data: {e}")
         return None, None
 
 # Test the function (Replace with your GitHub username)
